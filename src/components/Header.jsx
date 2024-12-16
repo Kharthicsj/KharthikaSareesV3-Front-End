@@ -40,10 +40,10 @@ const Header = () => {
         localStorage.removeItem("sessionStartTime");
         localStorage.removeItem("remainingTime");
         
-        setInterval(() => {
-          nav("/");
-          window.location.reload();
-        }, 3000);
+        // setInterval(() => {
+        //   nav("/");
+        //   window.location.reload();
+        // }, 3000);
         
       } else {
         toast.error("Something went wrong");
