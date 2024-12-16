@@ -56,7 +56,7 @@ const OtpValidatorPopup = ({ close, formData }) => {
         setLoading(true);
         try {
             const response = await axios.post(
-                `${process.env.REACT_APP_API_URL}/otp?action=resend`,
+                `${process.env.REACT_APP_API_URL}/otp?action=validate`,
                 { otp },
                 { withCredentials: true }
             );
