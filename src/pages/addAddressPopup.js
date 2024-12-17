@@ -13,6 +13,7 @@ const AddAddressPopup = ({ close, fetchData }) => {
     type: "",
     phone: "",
     addressContent: "",
+    state: "",
     pincode: "",
     email: "",
     landmark: "",
@@ -160,6 +161,17 @@ const AddAddressPopup = ({ close, fetchData }) => {
             required
           />
 
+          <label htmlFor='state' className='font-semibold'>State:</label>
+          <input
+            className='p-2 border-black border-2'
+            placeholder='Please enter your state'
+            name='state'
+            id='state'
+            value={data.state}
+            onChange={handleChange}
+            required
+          />
+
           <label htmlFor='landmark' className='font-semibold'>Landmark:</label>
           <input
             className='border-2 border-black resize-none rounded p-2'
@@ -170,7 +182,6 @@ const AddAddressPopup = ({ close, fetchData }) => {
             onChange={handleChange}
             required
           />
-
 
           <button className='bg-orange-500 px-2 py-3 mb-10 text-white hover:bg-red-700'
             onClick={handleUpload}

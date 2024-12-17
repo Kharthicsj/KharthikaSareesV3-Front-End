@@ -13,6 +13,7 @@ const EditAddressPopup = ({ close, fetchData, userData, id }) => {
         type: "",
         phone: "",
         addressContent: "",
+        state: "",
         pincode: "",
         email: "",
         landmark: "",
@@ -28,6 +29,7 @@ const EditAddressPopup = ({ close, fetchData, userData, id }) => {
                 type: userData?.type || "",
                 phone: userData?.phone || "",
                 addressContent: userData?.addressContent || "",
+                state: userData?.state || "",
                 pincode: userData?.pincode || "",
                 email: userData?.email || "",
                 landmark: userData?.landmark || "",
@@ -172,6 +174,17 @@ const EditAddressPopup = ({ close, fetchData, userData, id }) => {
                         name='addressContent'
                         id='addressContent'
                         value={data.addressContent}
+                        onChange={handleChange}
+                        required
+                    />
+
+                    <label htmlFor='state' className='font-semibold'>State:</label>
+                    <input
+                        className='p-2 border-black border-2'
+                        placeholder='Please enter your state'
+                        name='state'
+                        id='state'
+                        value={data.state}
                         onChange={handleChange}
                         required
                     />
