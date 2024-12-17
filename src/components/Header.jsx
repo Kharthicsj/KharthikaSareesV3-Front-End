@@ -28,6 +28,7 @@ const Header = () => {
 
   const handleLogout = async () => {
     localStorage.clear()
+    dispatch(setUserDetails(null));
     try {
       const response = await axios.get(
         `${process.env.REACT_APP_API_URL}/logout`,
@@ -36,7 +37,6 @@ const Header = () => {
 
       if (response.data.success) {
         toast.success("Logout Successful");
-        dispatch(setUserDetails(null));
         localStorage.removeItem("sessionStartTime");
         localStorage.removeItem("remainingTime");
         
