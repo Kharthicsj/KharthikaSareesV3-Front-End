@@ -81,7 +81,6 @@ const OrderPreparation = () => {
             transactionId: "T" + Date.now(),
         };
 
-        setLoading(true);
         try {
             const response = await axios.post(`${process.env.REACT_APP_API_URL}/payment`, data);
             if (response.data && response.data.redirectUrl) {
@@ -93,8 +92,6 @@ const OrderPreparation = () => {
         } catch (error) {
             console.error("Error during checkout:", error);
             alert("Error occurred during checkout. Please try again later.");
-        } finally {
-            setLoading(false);
         }
     };
 

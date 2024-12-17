@@ -6,9 +6,10 @@ import { useLocation, useNavigate } from 'react-router-dom';
 const OrderSuccessful = () => {
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
-  const [transactionId, setTransactionId] = useState(null); 
+  const [transactionId, setTransactionId] = useState(null);
   const [isOrderPlaced, setIsOrderPlaced] = useState(false);
-  const [isRequestSent, setIsRequestSent] = useState(false); 
+  const [isRequestSent, setIsRequestSent] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null); // To handle errors
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -24,7 +25,7 @@ const OrderSuccessful = () => {
       setTransactionId(transactionIdFromUrl);
     } else {
       alert("No transaction ID found! You cannot proceed with the order.");
-      navigate("/"); 
+      navigate("/");
     }
 
     const fetchCartItems = async () => {
@@ -35,6 +36,7 @@ const OrderSuccessful = () => {
         calculateTotalPrice(data);
       } catch (error) {
         console.error("Failed to fetch cart items", error);
+        setErrorMessage("Failed to load cart items. Please try again.");
       }
     };
 
@@ -43,7 +45,7 @@ const OrderSuccessful = () => {
 
   useEffect(() => {
     if (
-      transactionId && 
+      transactionId &&
       cartItems.length > 0 &&
       totalPrice > 0 &&
       !isOrderPlaced && 
@@ -78,19 +80,28 @@ const OrderSuccessful = () => {
         axios.post(`${process.env.REACT_APP_API_URL}/new-order`, orderData, { withCredentials: true })
           .then((response) => {
             console.log("Order placed successfully:", response.data);
-            setIsOrderPlaced(true); 
+            setIsOrderPlaced(true);
           })
           .catch((error) => {
             console.error("Error while placing the order:", error);
             setIsRequestSent(false);
+            setErrorMessage("There was an issue placing your order. Please try again.");
           });
       }
     }
   }, [cartItems, totalPrice, transactionId, isOrderPlaced, isRequestSent]);
 
+  if (errorMessage) {
+    return <div className="error-message">{errorMessage}</div>;
+  }
+
   return (
     <div className='bg-white'>
-      <OrderPlaced />
+      {isOrderPlaced ? (
+        <OrderPlaced />
+      ) : (
+        <div>Loading...</div>
+      )}
     </div>
   );
 };
