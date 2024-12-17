@@ -1,19 +1,24 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import CancelOrderPopup from './CancelOrderPopup';
+import Loading from '../components/Loading';
 
 const Orders = () => {
     const [orderData, setOrderData] = useState([]);
     const [openCancel, setOpenCancel] = useState(false);
     const [selectedOrderId, setSelectedOrderId] = useState(null); // Define the selected order ID
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const fetchOrderData = async () => {
+            setLoading(true);
             try {
                 const response = await axios.get(`${process.env.REACT_APP_API_URL}/my-orders`, { withCredentials: true });
                 setOrderData(response?.data?.data);
             } catch (err) {
                 console.error('Failed to fetch orders:', err);
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -29,6 +34,10 @@ const Orders = () => {
             )
         );
     };
+
+    if(loading) {
+        return <Loading />
+    }
 
     return (
         <div className="min-h-screen bg-gray-50 py-10">

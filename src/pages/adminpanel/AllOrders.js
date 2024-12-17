@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import Loading from '../../components/Loading';
 
 const AllOrders = () => {
 	const [orders, setOrders] = useState([]);
 	const [orderStatus, setOrderStatus] = useState({});
 	const [searchQuery, setSearchQuery] = useState('');
+	const [loading, setLoading] = useState(false);
 
 	// Fetch all orders
 	useEffect(() => {
 		const fetchAllOrders = async () => {
+			setLoading(true);
 			try {
 				const response = await axios.get(`${process.env.REACT_APP_API_URL}/all-orders`);
 				console.log(response.data); // For debugging
@@ -22,6 +25,8 @@ const AllOrders = () => {
 				setOrderStatus(initialStatuses); // Set the initial order statuses
 			} catch (err) {
 				console.error(err);
+			} finally {
+				setLoading(false);
 			}
 		};
 
@@ -29,6 +34,7 @@ const AllOrders = () => {
 	}, []);
 
 	const handleStatusChange = async (orderId, newStatus) => {
+		setLoading(true);
 		try {
 			setOrderStatus((prevState) => ({
 				...prevState,
@@ -40,6 +46,8 @@ const AllOrders = () => {
 		} catch (err) {
 			toast.error("Failed to Update the order status")
 			console.error('Error updating order status:', err);
+		} finally {
+			setLoading(false);
 		}
 	};
 	// Filter orders based on the search query
@@ -53,6 +61,10 @@ const AllOrders = () => {
 			order.product.some((product) => product.productName.toLowerCase().includes(query)) // Check products for matching name
 		);
 	});
+
+	if(loading) {
+		return <Loading />
+	}
 
 	return (
 		<div className="max-w-7xl mx-auto p-6">

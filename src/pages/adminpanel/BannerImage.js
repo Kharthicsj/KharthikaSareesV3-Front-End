@@ -3,6 +3,7 @@ import BannerUploadPopup from './BannerUploadPopup';
 import axios from 'axios';
 import { FaTrash, FaPencil } from 'react-icons/fa6';
 import BannerEditPopup from './BannerEditPopup';
+import Loading from '../../components/Loading';
 
 const BannerImage = () => {
   const [open, setOpen] = useState(false);
@@ -15,12 +16,14 @@ const BannerImage = () => {
   const [screenFilter, setScreenFilter] = useState('all');
   const [hoveredBanner, setHoveredBanner] = useState(null);
   const [selectedBanner, setSelectedBanner] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetchBanners();
   }, []);
 
   const fetchBanners = async () => {
+    setLoading(true);
     try {
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/fetch-banner`);
       setBanners({
@@ -29,6 +32,8 @@ const BannerImage = () => {
       });
     } catch (error) {
       console.error('Error fetching banners:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -53,6 +58,7 @@ const BannerImage = () => {
   };
 
   const handleDeleteBanner = async (bannerId) => {
+    setLoading(true);
     try {
       await axios.delete(`${process.env.REACT_APP_API_URL}/delete-banner/${bannerId}`);
       setBanners((prevState) => {
@@ -65,6 +71,8 @@ const BannerImage = () => {
       });
     } catch (error) {
       console.error('Error deleting banner:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -72,6 +80,10 @@ const BannerImage = () => {
     setSelectedBanner(banner); // Set the selected banner data
     setEditOpen(true); // Open the edit popup
   };
+
+  if(loading) {
+    return <Loading />
+  }
 
   const renderBanners = () => {
     const bannersToDisplay = (filter === 'active' ? banners.activeBanners : banners.inactiveBanners).filter(

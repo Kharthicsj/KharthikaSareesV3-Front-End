@@ -3,6 +3,7 @@ import axios from 'axios';
 import { MdCloudUpload, MdDelete } from 'react-icons/md';
 import { RiCloseLargeLine } from 'react-icons/ri';
 import imageTobase64 from '../../components/imageTobase64';
+import Loading from '../../components/Loading';
 
 const BannerUploadPopup = ({ close, fetchData }) => {
   const [image, setImage] = useState(null);
@@ -10,14 +11,23 @@ const BannerUploadPopup = ({ close, fetchData }) => {
   const [activeStatus, setActiveStatus] = useState('');
   const [screenType, setScreenType] = useState('mobile');
   const [imagePreview, setImagePreview] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handleUploadPic = async (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const imageBase64 = await imageTobase64(file);
-      setImage(imageBase64);
-      setImagePreview(URL.createObjectURL(file));
+    setLoading(true);
+    try {
+      const file = event.target.files[0];
+      if (file) {
+        const imageBase64 = await imageTobase64(file);
+        setImage(imageBase64);
+        setImagePreview(URL.createObjectURL(file));
+      }
+    } catch(err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
     }
+    
   };
 
   const handleImageRemove = () => {
@@ -26,6 +36,7 @@ const BannerUploadPopup = ({ close, fetchData }) => {
   };
 
   const handleSubmit = async (event) => {
+    setLoading(true);
     event.preventDefault();
 
     const bannerData = {
@@ -53,8 +64,13 @@ const BannerUploadPopup = ({ close, fetchData }) => {
       alert('An error occurred while uploading the banner.');
     } finally {
       fetchData();
+      setLoading(false)
     }
   };
+
+  if(loading) {
+    return <Loading />
+  }
 
   return (
     <div className="fixed bg-slate-500 bg-opacity-15 w-full h-full top-0 left-0 flex justify-center items-center">

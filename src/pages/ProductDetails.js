@@ -30,6 +30,7 @@ const ProductDetails = () => {
 
   const handleAddToCart = async (e, productId) => {
     e.preventDefault();
+    setLoading(true);
     try {
       await addProductToCart(productId);
       Context.fetchCartItems();
@@ -37,6 +38,7 @@ const ProductDetails = () => {
       console.error("Failed to add product to cart", error);
       toast.error("⚠️ Oops! Could not add item to cart. Try again!");
     } finally {
+      setLoading(false)
       setTimeout(() => {
         window.location.reload();
       }, 2000);
@@ -44,6 +46,7 @@ const ProductDetails = () => {
   };
 
   const handleRemoveFromCart = async (e, productId) => {
+    setLoading(true)
     e.preventDefault();
     try {
       await removeProductFromCart(productId);
@@ -53,6 +56,7 @@ const ProductDetails = () => {
       console.error("Failed to remove product from cart", error);
       toast.error("⚠️ Oops! Could not remove item. Try again!");
     } finally {
+      setLoading(false)
       setTimeout(() => {
         window.location.reload();
       }, 2000);
@@ -60,6 +64,7 @@ const ProductDetails = () => {
   };
 
   const handleAddToWishlist = async (e, productId) => {
+    setLoading(true);
     e.preventDefault();
     try {
       await addProductToWishList(productId);
@@ -67,10 +72,13 @@ const ProductDetails = () => {
     } catch (error) {
       console.error("Failed to add product to wishlist", error);
       toast.error("⚠️ Oops! Could not add item to wishlist. Try again!");
+    } finally {
+      setLoading(false)
     }
   };
 
   const handleRemoveFromWishlist = async (e, productId) => {
+    setLoading(true)
     e.preventDefault();
     try {
       await removeProductFromWishList(productId);
@@ -78,6 +86,8 @@ const ProductDetails = () => {
     } catch (error) {
       console.error("Failed to remove product from wishlist", error);
       toast.error("⚠️ Oops! Could not remove item. Try again!");
+    } finally {
+      setLoading(false)
     }
   };
 

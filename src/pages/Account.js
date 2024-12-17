@@ -9,10 +9,12 @@ import { MdCloudUpload } from "react-icons/md";
 import imageTobase64 from "../components/imageTobase64";
 import EditAddressPopup from "./EditAddressPopup";
 import LoginGif from "../assets/User.gif"
+import Loading from "../components/Loading";
 
 const Account = () => {
     const [open, setOpen] = useState(false);
     const [editOpen, setEditOpen] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const [editMode, setEditMode] = useState({
         name: false,
@@ -37,6 +39,7 @@ const Account = () => {
     });
 
     const fetchUser = async () => {
+        setLoading(true);
         try {
             const response = await axios.get(
                 `${process.env.REACT_APP_API_URL}/account-details`,
@@ -46,10 +49,13 @@ const Account = () => {
             setTempData(response?.data?.data);
         } catch (err) {
             console.log(err);
+        } finally {
+            setLoading(false);
         }
     };
 
     const handleProfilePicSave = async (file) => {
+        setLoading(true);
         const image = await imageTobase64(file);
 
         try {
@@ -67,6 +73,8 @@ const Account = () => {
         } catch (err) {
             console.log(err);
             toast.error("An error occurred while updating profile picture");
+        } finally {
+            setLoading(false);
         }
 
         setTempData({ ...tempData, profilepic: image });
@@ -75,6 +83,7 @@ const Account = () => {
 
 
     const updateAccountDetails = async () => {
+        setLoading(true);
         try {
             const response = await axios.post(
                 `${process.env.REACT_APP_API_URL}/update-account-details`,
@@ -91,6 +100,8 @@ const Account = () => {
         } catch (err) {
             console.log(err);
             toast.error("An error occurred while updating account details");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -100,6 +111,7 @@ const Account = () => {
     };
 
     const deleteAddress = async (addressId) => {
+        setLoading(true);
         try {
             const response = await axios.post(
                 `${process.env.REACT_APP_API_URL}/delete-address`, { addressId },
@@ -114,6 +126,8 @@ const Account = () => {
         } catch (err) {
             console.log(err);
             toast.error("An error occurred while deleting address");
+        } finally {
+            setLoading(false)
         }
     };
 
@@ -139,6 +153,10 @@ const Account = () => {
                 onSave(file); // Save the file
             }
         };
+
+        if(loading) {
+            return <Loading />
+        }
 
         return (
             <div className="relative">
