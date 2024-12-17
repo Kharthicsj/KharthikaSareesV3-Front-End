@@ -185,6 +185,7 @@ const OrderPreparation = () => {
                                                             fullname: address.fullname || "",
                                                             phone: address.phone || "",
                                                             addressContent: address.addressContent || "",
+                                                            state: address.state || "",
                                                             pincode: address.pincode || "",
                                                             email: address.email || "",
                                                             landmark: address.landmark || "",
@@ -204,6 +205,7 @@ const OrderPreparation = () => {
                                             <p className="text-gray-600">{address.addressContent}</p>
                                             <p className="text-gray-600">Landmark: {address.landmark}</p>
                                             <p className="text-gray-600">Pincode: {address.pincode}</p>
+                                            <p className="text-gray-600">State: {address.state}</p>
                                             <p className="text-gray-600">Phone: {address.phone}</p>
                                             <p className="text-gray-600">Type: {address.type}</p>
                                         </div>
@@ -230,6 +232,7 @@ const OrderPreparation = () => {
                                         <p className="text-gray-600">{selectedAddress.addressContent}</p>
                                         <p className="text-gray-600">Landmark: {selectedAddress.landmark}</p>
                                         <p className="text-gray-600">Pincode: {selectedAddress.pincode}</p>
+                                        <p className="text-gray-600">State: {selectedAddress.state}</p>
                                         <p className="text-gray-600">Phone: {selectedAddress.phone}</p>
                                         <p className="text-gray-600">Type: {selectedAddress.type}</p>
                                     </div>

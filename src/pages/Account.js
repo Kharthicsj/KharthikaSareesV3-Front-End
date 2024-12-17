@@ -355,6 +355,7 @@ const Account = () => {
                                                         fullname: address.fullname || "",
                                                         phone: address.phone || "",
                                                         addressContent: address.addressContent || "",
+                                                        state: address.state || "",
                                                         pincode: address.pincode || "",
                                                         email: address.email || "",
                                                         landmark: address.landmark || "",
@@ -389,11 +390,15 @@ const Account = () => {
                                             <strong>Pincode:</strong> {address.pincode}
                                         </p>
                                         <p className="text-gray-600">
-                                            <strong>Email:</strong> {address.email}
+                                            <strong>State:</strong> {address.state}
                                         </p>
                                         <p className="text-gray-600">
                                             <strong>Landmark:</strong> {address.landmark}
                                         </p>
+                                        <p className="text-gray-600">
+                                            <strong>Email:</strong> {address.email}
+                                        </p>
+                                        
                                     </div>
                                 ))
                             ) : (
