@@ -3,6 +3,7 @@ import axios from "axios";
 import { FaPencilAlt } from "react-icons/fa";
 import EditAddressPopup from "./EditAddressPopup";
 import AddAddressPopup from "./addAddressPopup";
+import { v4 as uuidv4 } from 'uuid';
 
 const OrderPreparation = () => {
     const [cartItems, setCartItems] = useState([]);
@@ -77,12 +78,13 @@ const OrderPreparation = () => {
             name: userData.name,
             amount: totalPrice * 100,
             number: userData.phone,
-            MID: "MID" + Date.now(),
-            transactionId: "T" + Date.now(),
+            MID: "MID" + uuidv4(),
+            transactionId: "T" + uuidv4(),
         };
 
         try {
             const response = await axios.post(`${process.env.REACT_APP_API_URL}/payment`, data);
+            console.log(response)
             if (response.data && response.data.redirectUrl) {
                 window.location.href = response.data.redirectUrl;
             } else {
