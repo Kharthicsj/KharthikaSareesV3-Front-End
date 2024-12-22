@@ -17,7 +17,10 @@ const Cart = () => {
       try {
         const response = await axios.get(`${process.env.REACT_APP_API_URL}/fetch-cart`, { withCredentials: true });
         const data = response.data.data;
-        setCartItems(data);
+
+        const filteredItems = data.filter((item) => item.total_quantity > 0);
+        setCartItems(filteredItems);
+
         calculateTotalPrice(data);
       } catch (error) {
         console.error("Failed to fetch cart items", error);
@@ -89,7 +92,7 @@ const Cart = () => {
 
   return (
     <div>
-        <BackgroundAnimation />
+      <BackgroundAnimation />
       <div className="container mx-auto px-4 py-6">
         {cartItems.length === 0 ? (
           <div className="text-center">

@@ -58,6 +58,8 @@ const WishList = () => {
         setFilteredItems(updatedItems);
     }, [selectedCategory, selectedFabric, selectedSort, wishListItems]);
 
+    console.log(wishListItems)
+
     const handleRemoveFromWishlist = async (productId) => {
         try {
             await axios.post(`${process.env.REACT_APP_API_URL}/remove-from-wishlist`, { productId }, { withCredentials: true });
@@ -165,14 +167,23 @@ const WishList = () => {
                                     {filteredItems.map((item) => (
                                         <div
                                             key={item.productId}
-                                            className="card bg-white rounded-lg p-4 shadow-lg border border-gray-200 relative overflow-hidden w-full transform transition-all duration-300 ease-in-out group hover:scale-105 hover:shadow-2xl"
+                                            className={`card bg-white rounded-lg p-4 shadow-lg border border-gray-200 relative overflow-hidden w-full transform transition-all duration-300 ease-in-out group ${item.total_quantity === 0 ? 'grayscale' : 'hover:scale-105 hover:shadow-2xl'
+                                                }`}
                                         >
-                                            <div className="card-image group-hover:scale-105 transition-transform duration-300 ease-in-out">
+                                            <div
+                                                className={`card-image transition-transform duration-300 ease-in-out ${item.total_quantity === 0 ? '' : 'group-hover:scale-105'
+                                                    }`}
+                                            >
                                                 <img
                                                     src={item.productImage}
                                                     alt={item.productName}
                                                     className="w-full h-48 object-cover rounded-lg md:h-56 lg:h-64"
                                                 />
+                                                {item.total_quantity === 0 && (
+                                                    <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                                                        <span className="text-white text-lg font-semibold">Out of Stock</span>
+                                                    </div>
+                                                )}
                                             </div>
                                             <div className="absolute top-4 right-4">
                                                 <button
@@ -182,19 +193,24 @@ const WishList = () => {
                                                     <AiOutlineDelete className="w-6 h-6" />
                                                 </button>
                                             </div>
-                                            <div className="card-content mt-4 text-center">
+                                            <div
+                                                className={`card-content mt-4 text-center ${item.total_quantity === 0 ? 'opacity-50' : ''
+                                                    }`}
+                                            >
                                                 <h3 className="text-lg font-semibold text-gray-800">{item.productName}</h3>
                                                 <p className="text-md text-gray-700 mt-2">₹{item.selling}</p>
                                                 <p className="text-sm text-gray-500 mt-1">{item.category}</p>
                                             </div>
-                                            <div className="mt-4 text-center">
-                                                <Link
-                                                    to={`/product/${item.productId}`}
-                                                    className="bg-orange-500 text-white px-4 py-1 rounded-full hover:bg-orange-700 transition duration-300"
-                                                >
-                                                    View Details
-                                                </Link>
-                                            </div>
+                                            {item.total_quantity > 0 && (
+                                                <div className="mt-4 text-center">
+                                                    <Link
+                                                        to={`/product/${item.productId}`}
+                                                        className="bg-orange-500 text-white px-4 py-1 rounded-full hover:bg-orange-700 transition duration-300"
+                                                    >
+                                                        View Details
+                                                    </Link>
+                                                </div>
+                                            )}
                                         </div>
                                     ))}
                                 </div>
