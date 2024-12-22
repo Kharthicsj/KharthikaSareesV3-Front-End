@@ -77,6 +77,8 @@ const Cart = () => {
     }
   };
 
+  console.log(cartItems)
+
   const calculateTotalPrice = (items) => {
     const total = items.reduce((acc, item) => acc + item.selling * item.quantity_present, 0);
     setTotalPrice(total);

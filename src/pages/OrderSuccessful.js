@@ -97,12 +97,18 @@ const OrderSuccessful = () => {
   }
 
   return (
-    <div className='bg-white'>
+    <div className="bg-white min-h-screen flex items-center justify-center flex-col">
       {isOrderPlaced ? (
-        <div>
+        <div className="text-center w-screen">
           <OrderPlaced />
-          <Link to={"/my-orders"} 
-          className="text-white bg-orange-500 hover:bg-orange-600 px-4 py-2 rounded-full shadow-lg transform transition-all hover:scale-105 focus:outline-none focus:ring-2 focus:ring-orange-300 focus:ring-offset-2">My orders page</Link>
+          <div className="mt-6">
+            <Link
+              to={"/my-orders"}
+              className="text-white bg-orange-500 hover:bg-orange-600 px-4 py-2 rounded-full shadow-lg transform transition-all hover:scale-105 focus:outline-none focus:ring-2 focus:ring-orange-300 focus:ring-offset-2"
+            >
+              My Orders Page
+            </Link>
+          </div>
         </div>
       ) : (
         <div>
