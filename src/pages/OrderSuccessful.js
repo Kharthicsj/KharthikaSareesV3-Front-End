@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import OrderPlaced from '../components/OrderPlaced';
 import axios from 'axios';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import Loading from "../components/Loading";
 
 const OrderSuccessful = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -9,7 +10,7 @@ const OrderSuccessful = () => {
   const [transactionId, setTransactionId] = useState(null);
   const [isOrderPlaced, setIsOrderPlaced] = useState(false);
   const [isRequestSent, setIsRequestSent] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null); // To handle errors
+  const [errorMessage, setErrorMessage] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -48,7 +49,7 @@ const OrderSuccessful = () => {
       transactionId &&
       cartItems.length > 0 &&
       totalPrice > 0 &&
-      !isOrderPlaced && 
+      !isOrderPlaced &&
       !isRequestSent
     ) {
       const storedAddress = JSON.parse(localStorage.getItem('selectedAddress'));
@@ -58,7 +59,7 @@ const OrderSuccessful = () => {
           _id: item.productId,
           quantity: item.quantity_present,
           productName: item.productName,
-          category: item.category || "Unknown Category", 
+          category: item.category || "Unknown Category",
           fabric: item.fabric || "Unknown Fabric",
           productImage: item.productImage,
           description: item.description,
@@ -98,9 +99,15 @@ const OrderSuccessful = () => {
   return (
     <div className='bg-white'>
       {isOrderPlaced ? (
-        <OrderPlaced />
+        <div>
+          <OrderPlaced />
+          <Link to={"/my-orders"} 
+          className="text-white bg-orange-500 hover:bg-orange-600 px-4 py-2 rounded-full shadow-lg transform transition-all hover:scale-105 focus:outline-none focus:ring-2 focus:ring-orange-300 focus:ring-offset-2">My orders page</Link>
+        </div>
       ) : (
-        <div>Loading...</div>
+        <div>
+          <Loading />
+        </div>
       )}
     </div>
   );

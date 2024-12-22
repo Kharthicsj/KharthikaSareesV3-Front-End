@@ -13,7 +13,7 @@ const BackgroundAnimation = () => {
   };
 
   return (
-    <div className="absolute z-[-1] bg-transparent">
+    <div className="absolute mt-20 inset-0 w-full h-full z-[-1] overflow-hidden">
       <Lottie options={defaultOptions} height="100%" width="100%" />
     </div>
   );
