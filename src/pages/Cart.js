@@ -18,8 +18,7 @@ const Cart = () => {
         const response = await axios.get(`${process.env.REACT_APP_API_URL}/fetch-cart`, { withCredentials: true });
         const data = response.data.data;
 
-        const filteredItems = data.filter((item) => item.total_quantity > 0);
-        setCartItems(filteredItems);
+        setCartItems(data);
 
         calculateTotalPrice(data);
       } catch (error) {
@@ -41,7 +40,7 @@ const Cart = () => {
     } catch (error) {
       console.error("Failed to remove product from cart", error);
     } finally {
-      window.location.reload()
+      window.location.reload();
     }
   };
 
@@ -77,10 +76,10 @@ const Cart = () => {
     }
   };
 
-  console.log(cartItems)
-
   const calculateTotalPrice = (items) => {
-    const total = items.reduce((acc, item) => acc + item.selling * item.quantity_present, 0);
+    const total = items
+      .filter(item => item.total_quantity > 0) // Exclude out-of-stock items
+      .reduce((acc, item) => acc + item.selling * item.quantity_present, 0);
     setTotalPrice(total);
   };
 
@@ -118,9 +117,11 @@ const Cart = () => {
               {cartItems.map((item) => (
                 <div
                   key={item.productId}
-                  className="transition-transform transform hover:scale-105 hover:shadow-2xl bg-white rounded-lg p-6 shadow-xl relative group"
+                  className={`transition-transform transform hover:scale-105 hover:shadow-2xl ${
+                    item.total_quantity === 0 ? "bg-gray-100 grayscale" : "bg-white"
+                  } rounded-lg p-6 shadow-xl relative group`}
                 >
-                  <div className="overflow-hidden rounded-lg mb-4 transition-all duration-500 transform group-hover:scale-110">
+                  <div className={`overflow-hidden rounded-lg mb-4 transition-all duration-500 transform ${item.total_quantity === 0 ? "opacity-60" : "group-hover:scale-110"}`}>
                     <img
                       src={item.productImage}
                       alt={item.productName}
@@ -135,33 +136,37 @@ const Cart = () => {
                       <AiOutlineDelete className="w-6 h-6" />
                     </button>
                   </div>
-                  <h3 className="text-2xl font-semibold text-gray-800 mt-4">{item.productName}</h3>
-                  <p className="text-gray-600 mt-2">Actual Price: <span className="font-bold text-gray-800">₹{item.price}</span></p>
-                  <p className="text-gray-600">Selling Price: <span className="font-bold text-gray-800">₹{item.selling}</span></p>
-                  <p className="text-gray-600">Available: <span className="font-semibold">{item.total_quantity}</span></p>
-                  <div className="flex justify-between items-center mt-4">
-                    <h2>Quantity</h2>
-                    <div className="flex items-center gap-4">
-                      {item.quantity_present > 1 && (
-                        <button
-                          onClick={() => handleQuantityChange(item.productId, "decrease", item.total_quantity)}
-                          className="bg-gray-200 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-300 transition duration-200"
-                        >
-                          -
-                        </button>
-                      )}
-                      <span className="text-lg font-semibold">{item.quantity_present}</span>
-                      {item.quantity_present < item.total_quantity && (
-                        <button
-                          onClick={() => handleQuantityChange(item.productId, "increase", item.total_quantity)}
-                          className="bg-gray-200 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-300 transition duration-200"
-                        >
-                          +
-                        </button>
-                      )}
+                  <h3 className={`text-2xl font-semibold ${item.total_quantity === 0 ? "text-gray-500" : "text-gray-800"} mt-4`}>
+                    {item.productName}
+                  </h3>
+                  <p className="text-gray-600 mt-2">Actual Price: <span className={`font-bold ${item.total_quantity === 0 ? "text-gray-500" : "text-gray-800"}`}>₹{item.price}</span></p>
+                  <p className="text-gray-600">Selling Price: <span className={`font-bold ${item.total_quantity === 0 ? "text-gray-500" : "text-gray-800"}`}>₹{item.selling}</span></p>
+                  <p className="text-gray-600">Available: <span className={`font-semibold ${item.total_quantity === 0 ? "text-gray-500" : "text-gray-800"}`}>{item.total_quantity}</span></p>
+                  {item.total_quantity > 0 && (
+                    <div className="flex justify-between items-center mt-4">
+                      <h2>Quantity</h2>
+                      <div className="flex items-center gap-4">
+                        {item.quantity_present > 1 && (
+                          <button
+                            onClick={() => handleQuantityChange(item.productId, "decrease", item.total_quantity)}
+                            className="bg-gray-200 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-300 transition duration-200"
+                          >
+                            -
+                          </button>
+                        )}
+                        <span className="text-lg font-semibold">{item.quantity_present}</span>
+                        {item.quantity_present < item.total_quantity && (
+                          <button
+                            onClick={() => handleQuantityChange(item.productId, "increase", item.total_quantity)}
+                            className="bg-gray-200 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-300 transition duration-200"
+                          >
+                            +
+                          </button>
+                        )}
+                      </div>
+                      <span className="text-lg font-semibold">₹{item.selling * item.quantity_present}</span>
                     </div>
-                    <span className="text-lg font-semibold">₹{item.selling * item.quantity_present}</span>
-                  </div>
+                  )}
                   <div className="mt-4 text-center">
                     <Link
                       to={`/product/${item.productId}`}

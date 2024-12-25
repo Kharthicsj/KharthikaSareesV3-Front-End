@@ -33,8 +33,11 @@ const OrderPreparation = () => {
                     withCredentials: true,
                 });
                 const data = response.data.data;
-                setCartItems(data);
-                calculateTotalPrice(data);
+
+                const filteredData = data.filter((item) => item.total_quantity > 0);
+                setCartItems(filteredData);
+
+                calculateTotalPrice(filteredData);
             } catch (error) {
                 console.error("Failed to fetch cart items", error);
             } finally {
