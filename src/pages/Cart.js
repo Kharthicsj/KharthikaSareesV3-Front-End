@@ -117,9 +117,8 @@ const Cart = () => {
               {cartItems.map((item) => (
                 <div
                   key={item.productId}
-                  className={`transition-transform transform hover:scale-105 hover:shadow-2xl ${
-                    item.total_quantity === 0 ? "bg-gray-100 grayscale" : "bg-white"
-                  } rounded-lg p-6 shadow-xl relative group`}
+                  className={`transition-transform transform hover:scale-105 hover:shadow-2xl ${item.total_quantity === 0 ? "bg-gray-100 grayscale" : "bg-white"
+                    } rounded-lg p-6 shadow-xl relative group`}
                 >
                   <div className={`overflow-hidden rounded-lg mb-4 transition-all duration-500 transform ${item.total_quantity === 0 ? "opacity-60" : "group-hover:scale-110"}`}>
                     <img
@@ -186,7 +185,14 @@ const Cart = () => {
               <div className="mt-6 flex justify-center gap-6">
                 <button
                   className="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition duration-200"
-                  onClick={() => navigate("/order-preparation")}
+                  onClick={() => {
+                    const outOfStockItems = cartItems.filter(item => item.total_quantity === 0);
+                    if (outOfStockItems.length > 0) {
+                      alert("Some products in your cart are out of stock. Please remove them before proceeding to checkout.");
+                    } else {
+                      navigate("/order-preparation");
+                    }
+                  }}
                 >
                   Proceed to Checkout
                 </button>
